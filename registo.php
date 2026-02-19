@@ -8,30 +8,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Erro de segurança: Token inválido.");
     }
 
-    $novo_user = $_POST['user'];
-    $nova_pass = $_POST['pass'];
+    $novo_user = trim($_POST['user']);
+    $nova_pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
 
-    $erro = false;
-
-    // Adiciona ao array na sessão com a password criptografada
-    foreach ($_SESSION['lista_utilizadores'] as $utilizador) {
-        // Verifica e compara a password escrita com o hash guardado
-        if ($utilizador['user'] === $novo_user) {
-            $msg = "<div class='alert alert-danger'>O nome de utilizador já existe.</div>";
-            $erro = true;
-            break;
+    // Verifica se o utilizador já existe
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM utilizadores WHERE username = ?");
+    $stmt->execute([$novo_user]);
+    
+    if ($stmt->fetchColumn() > 0) {
+        $msg = "<div class='alert alert-danger'>O nome de utilizador já existe.</div>";
+    } else {
+        // Insere na BD com o perfil 'user'
+        $stmt = $pdo->prepare("INSERT INTO utilizadores (username, password, perfil) VALUES (?, ?, 'user')");
+        if ($stmt->execute([$novo_user, $nova_pass])) {
+            $msg = "<div class='alert alert-success'>Registo efetuado com sucesso! <a href='login.php'>Faça Login</a>.</div>";
+        } else {
+            $msg = "<div class='alert alert-danger'>Erro ao registar. Tente novamente.</div>";
         }
-    }
-
-    if (!$erro) {
-        $_SESSION['lista_utilizadores'][] = [
-            'user' => $novo_user,
-            'pass' => password_hash($nova_pass, PASSWORD_DEFAULT),
-            'perfil' => 'Cliente',
-            'token' => bin2hex(random_bytes(16))
-        ];
-
-        $msg = "<div class='alert alert-success'>Registo efetuado com sucesso! <a href='login.php'>Faça Login</a>.</div>";
     }
 }
 ?>

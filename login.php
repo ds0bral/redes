@@ -3,23 +3,24 @@ include 'header.php';
 $erro = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $u_login = $_POST['user'];
+    $u_login = trim($_POST['user']);
     $p_login = $_POST['pass'];
 
-    // Procura no array de utilizadores
-    foreach ($_SESSION['lista_utilizadores'] as $utilizador) {
-        // Verifica e compara a password escrita com o hash guardado
-        if ($utilizador['user'] === $u_login && password_verify($p_login, $utilizador['pass'])) {
-            $_SESSION['sessao_ativa'] = true;
-            $_SESSION['user_id'] = $utilizador['user'];
-            $_SESSION['perfil'] = $utilizador['perfil'];
-            $_SESSION['user_token'] = $utilizador['token'];
+    $stmt = $pdo->prepare("SELECT * FROM utilizadores WHERE username = ?");
+    $stmt->execute([$u_login]);
+    $utilizador = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            header("Location: dashboard.php");
-            exit();
-        }
+    // Verifica se o utilizador existe e a password está correta
+    if ($utilizador && password_verify($p_login, $utilizador['password'])) {
+        $_SESSION['sessao_ativa'] = true;
+        $_SESSION['user_id'] = $utilizador['username'];
+        $_SESSION['perfil'] = $utilizador['perfil'];
+
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $erro = "<div class='alert alert-danger'>Dados incorretos.</div>";
     }
-    $erro = "<div class='alert alert-danger'>Dados incorretos.</div>";
 }
 ?>
 

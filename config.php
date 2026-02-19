@@ -1,20 +1,21 @@
 <?php
 session_start();
 
-// Se ainda não existir lista de utilizadores na sessão, cria o Admin padrão.
-if (!isset($_SESSION['lista_utilizadores'])) {
-    $_SESSION['lista_utilizadores'] = [
-        [
-            'user' => 'admin',
-            'pass' => password_hash('1234', PASSWORD_DEFAULT), 
-            'perfil' => 'Administrador',
-            // Token único de utilizador
-            'token' => bin2hex(random_bytes(16))
-        ]
-    ];
+// Configurações da Base de Dados
+$host = 'localhost';
+$dbname = 'qualiauto';
+$user = 'root'; 
+$pass = ''; 
+
+// Conexão PDO
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro de ligação à base de dados: " . $e->getMessage());
 }
 
-// Token de Segurança para Formulários
+// Token de Segurança para Formulários (CSRF)
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -23,6 +24,14 @@ if (!isset($_SESSION['csrf_token'])) {
 function verificar_autenticacao() {
     if (!isset($_SESSION['sessao_ativa'])) {
         header("Location: login.php");
+        exit();
+    }
+}
+
+// Função para verificar se é admin
+function verificar_admin() {
+    if (!isset($_SESSION['sessao_ativa']) || $_SESSION['perfil'] !== 'admin') {
+        header("Location: index.php");
         exit();
     }
 }
