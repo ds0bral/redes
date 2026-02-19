@@ -5,7 +5,7 @@ verificar_admin(); // Apenas administradores podem aceder
 $msg = "";
 $carro = null;
 
-// 1. Ir buscar os dados atuais da viatura ao entrar na página
+// Ir buscar os dados atuais da viatura ao entrar na página
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
     $stmt = $pdo->prepare("SELECT * FROM viaturas WHERE id = ?");
@@ -19,7 +19,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     die("ID inválido.");
 }
 
-// 2. Processar a atualização quando o formulário é submetido
+// Processar a atualização quando o formulário é submetido
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $modelo = trim($_POST['modelo']);
     $preco = floatval($_POST['preco']);

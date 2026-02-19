@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Move a imagem da pasta temporária para a pasta IMG
             move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_destino);
         } else {
-            $msg = "<div class='alert alert-danger'>Apenas são permitidas imagens JPG, JPEG, PNG ou WEBP.</div>";
+            $msg = "<div class='alert alert-danger'>Apenas são permitidas imagens JPG, JPEG, PNG.</div>";
         }
     }
 

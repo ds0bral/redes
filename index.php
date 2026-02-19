@@ -1,8 +1,8 @@
 <?php 
 include 'header.php'; 
 
-// Ir buscar as 3 viaturas inseridas mais recentemente
-$stmt = $pdo->query("SELECT * FROM viaturas ORDER BY id DESC LIMIT 3");
+// Ir buscar as 2 viaturas inseridas mais recentemente
+$stmt = $pdo->query("SELECT * FROM viaturas ORDER BY id DESC LIMIT 2");
 $ultimas_viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
