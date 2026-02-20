@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Marca / Modelo</label>
-                <input type="text" name="modelo" class="form-control" required placeholder="Ex: TESLA - Model 3">
+                <input type="text" name="modelo" class="form-control" required placeholder="Ex: Audi A5>
             </div>
             <div class="mb-3">
                 <label class="form-label">Preço (&euro;)</label>

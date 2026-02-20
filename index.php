@@ -9,7 +9,7 @@ $ultimas_viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="container my-5">
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold text-danger">Bem-vindo à QualiAuto</h1>
-        <p class="lead text-muted">Conheça os nossos destaques da semana.</p>
+        <p class="lead text-muted">Conheça as nossas viaturas mais recentes.</p>
     </div>
 
     <section id="galeria-destaques" class="row g-4 justify-content-center">

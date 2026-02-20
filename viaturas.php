@@ -19,6 +19,7 @@ $stock_viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table class="table table-hover table-striped shadow-sm align-middle">
             <thead class="table-dark">
                 <tr>
+                    <th class="text-center">Fotografia</th>
                     <th>Marca / Modelo</th>
                     <th>Preço</th>
                     <th>Ano</th>
@@ -31,7 +32,11 @@ $stock_viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (count($stock_viaturas) > 0): ?>
                     <?php foreach($stock_viaturas as $carro): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($carro['modelo']); ?></td>
+                        <td class="text-center">
+                            <img src="IMG/<?php echo htmlspecialchars($carro['imagem']); ?>" alt="<?php echo htmlspecialchars($carro['modelo']); ?>" class="img-thumbnail shadow-sm" style="width: 240px; height: 160px; object-fit: cover;">
+                        </td>
+                        
+                        <td class="fw-bold"><?php echo htmlspecialchars($carro['modelo']); ?></td>
                         <td class="fw-bold text-success"><?php echo number_format($carro['preco'], 2, ',', ' '); ?> &euro;</td>
                         <td><span class="badge bg-secondary"><?php echo htmlspecialchars($carro['ano']); ?></span></td>
                         
@@ -49,7 +54,7 @@ $stock_viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="4" class="text-center py-4">Não existem viaturas em stock neste momento.</td>
+                        <td colspan="5" class="text-center py-4 text-muted">Não existem viaturas em stock neste momento.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
