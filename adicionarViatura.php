@@ -1,6 +1,7 @@
 <?php
+include 'config.php';
 include 'header.php';
-verificar_admin(); // Apenas administradores podem aceder
+verificar_admin(); 
 
 $msg = "";
 
@@ -8,19 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $modelo = trim($_POST['modelo']);
     $preco = floatval($_POST['preco']);
     $ano = intval($_POST['ano']);
-    $nome_imagem = "default.png"; // Imagem por defeito
+    $nome_imagem = "default.png";
 
-    // Processamento do Upload da Imagem
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
         $extensao = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
         $extensoes_permitidas = ['jpg', 'jpeg', 'png'];
 
         if (in_array($extensao, $extensoes_permitidas)) {
-            // Gera um nome único para não haver ficheiros substituídos por engano
             $nome_imagem = uniqid() . "." . $extensao;
             $caminho_destino = "IMG/" . $nome_imagem;
-
-            // Move a imagem da pasta temporária para a pasta IMG
             move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_destino);
         } else {
             $msg = "<div class='alert alert-danger'>Apenas são permitidas imagens JPG, JPEG, PNG.</div>";
@@ -57,10 +54,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label">Ano</label>
                 <input type="number" name="ano" class="form-control" required placeholder="Ex: 2024">
             </div>
+            
             <div class="mb-4">
                 <label class="form-label">Fotografia da Viatura</label>
-                <input type="file" name="imagem" class="form-control" accept="image/*">
+                <div id="drop-zone" class="border border-secondary border-2 rounded p-4 text-center" style="border-style: dashed !important; cursor: pointer;" onclick="document.getElementById('imagem-input').click();">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Arraste e largue a imagem aqui ou clique para selecionar</p>
+                </div>
+                <input type="file" name="imagem" id="imagem-input" class="d-none" accept="image/*">
             </div>
+
             <div class="d-flex justify-content-between">
                 <a href="dashboard.php" class="btn btn-outline-secondary">Voltar</a>
                 <button type="submit" class="btn btn-danger">Guardar Viatura</button>

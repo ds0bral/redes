@@ -1,46 +1,30 @@
-<?php 
-include 'header.php'; 
-$msg_feedback = "";
-
-// Validação PHP
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = trim($_POST['nome']);
-    $email = trim($_POST['email']);
-    
-    if (empty($nome) || empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $msg_feedback = "<div class='alert alert-danger'>Erro: Verifique os dados inseridos.</div>";
-    } else {
-        $msg_feedback = "<div class='alert alert-success'>Obrigado, $nome! Recebemos a sua mensagem.</div>";
-    }
-}
-?>
+<?php include 'header.php'; ?>
 
 <main class="container my-5">
     <h1>Fale Connosco</h1>
     <div class="row mt-4">
         <div class="col-md-6">
-            <form id="form-contacto" method="POST" class="card p-4 shadow-sm">
-                <?php echo $msg_feedback; ?>
+            <form id="form-contacto" class="card p-4 shadow-sm">
+                <div id="msg-feedback"></div>
+                
                 <div class="mb-3">
                     <label class="form-label">Nome</label>
                     <input type="text" name="nome" id="nome" class="form-control" required>
-                    <small class="msgerror text-danger"></small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" id="email" class="form-control" required>
-                    <small class="msgerror text-danger"></small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Assunto</label>
-                    <select name="assunto" class="form-select">
+                    <select name="assunto" id="assunto" class="form-select">
                         <option value="info">Informações</option>
                         <option value="venda">Vendas</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mensagem</label>
-                    <textarea name="mensagem" class="form-control" rows="4"></textarea>
+                    <textarea name="mensagem" id="mensagem" class="form-control" rows="4" required></textarea>
                 </div>
                 <button type="submit" id="btn-enviar" class="btn btn-danger w-100">Enviar Mensagem</button>
             </form>
