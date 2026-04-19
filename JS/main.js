@@ -11,7 +11,7 @@ window.addEventListener("load", function () {
     const loadingGaleria = document.getElementById("loading-galeria");
 
     if (galeria && loadingGaleria) {
-        fetch('api_viaturas.php')
+        fetch('API/api_viaturas.php')
             .then(response => response.json())
             .then(data => {
                 loadingGaleria.style.display = 'none';
@@ -113,7 +113,7 @@ window.addEventListener("load", function () {
 
             msgFeedback.innerHTML = "<div class='alert alert-info'>A enviar mensagem...</div>";
 
-            fetch('api_contacto.php', {
+            fetch('API/api_contacto.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados)
