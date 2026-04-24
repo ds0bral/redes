@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-// Recebe os dados JSON enviados pelo JavaScript (Fetch API)
+// Recebe os dados JSON enviados pelo Javascript
 $dados = json_decode(file_get_contents("php://input"), true);
 
 if (isset($dados['nome']) && isset($dados['email']) && isset($dados['mensagem'])) {
@@ -10,20 +10,23 @@ if (isset($dados['nome']) && isset($dados['email']) && isset($dados['mensagem'])
     $mensagem = htmlspecialchars($dados['mensagem']);
     $assunto = htmlspecialchars($dados['assunto']);
 
-    // Configuração do Email
+    // Configuração base do email nativo do PHP
     $para = "admin@qualiauto.pt"; 
     $assunto_email = "Novo Contacto QualiAuto - Portugal: " . $assunto;
     $corpo = "Nome: $nome\nEmail: $email\n\nMensagem:\n$mensagem";
-    $cabecalhos = "From: $email\r\nReply-To: $email";
+    
+    // Cabeçalhos para o email saber de quem vem
+    $cabecalhos = "From: webmaster@qualiauto.pt\r\n";
+    $cabecalhos .= "Reply-To: $email\r\n";
+    $cabecalhos .= "X-Mailer: PHP/" . phpversion();
 
-    // Função mail() para envio (requer servidor SMTP)
-    if(@mail($para, $assunto_email, $corpo, $cabecalhos)) {
+    // A função mail() vai enviar o email para o Mail Catcher do Laragon
+    if(mail($para, $assunto_email, $corpo, $cabecalhos)) {
         echo json_encode(["sucesso" => true, "mensagem" => "Obrigado, $nome! A sua mensagem foi enviada com sucesso."]);
     } else {
-        // Fallback simulado para não bloquear no localhost (caso não tenhas o mail configurado no XAMPP)
-        echo json_encode(["sucesso" => true, "mensagem" => "Obrigado, $nome! (Simulação: Email registado via API JSON)"]);
+        echo json_encode(["sucesso" => false, "mensagem" => "Ocorreu um erro no servidor ao tentar enviar a mensagem."]);
     }
 } else {
-    echo json_encode(["sucesso" => false, "mensagem" => "Erro: Preencha todos os campos obrigatórios."]);
+    echo json_encode(["sucesso" => false, "mensagem" => "Por favor, preencha todos os campos obrigatórios."]);
 }
 ?>
