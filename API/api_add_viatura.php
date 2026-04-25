@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../config.php';
 header('Content-Type: application/json');
 if (!isset($_SESSION['perfil']) || $_SESSION['perfil'] !== 'admin') { exit(json_encode(["sucesso" => false])); }
